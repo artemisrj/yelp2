@@ -1,0 +1,279 @@
+.reviewContext{
+		float:left;
+		display:block;
+		color:#666;
+		height:770px;
+		/*background-color:#2d4f2c;*/
+		white-space:normal;
+		overflow:scroll;
+		width:725px;
+		word-wrap:break-word;
+		word-break:break-all;
+	}
+body{
+	margin:0px;
+	font-family:'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana', sans-serif;
+}
+	#maincanvas{
+		height:370px;
+		width:800px;
+		float:left;
+		margin-top:10px;
+		margin-left:30px;
+		
+	}
+
+	#titles{
+		background-color: #3d4a57;
+		padding:10px;
+		padding-left:20px;
+		color:#ccc;
+		height:30px;
+	}
+	
+	select{
+		color:#444;
+	}
+	.sreview{
+		margin-top:15px;
+	}
+	
+	g{
+		overflow:hidden;
+	}
+	rect.bar{
+		fill: #9abfe4 ;
+	}
+	
+	.axis path,
+    .axis line{
+        fill: none;
+        stroke: grey;
+        stroke-width: 1;
+        shape-rendering: crispEdges;
+    }
+	
+	.xbrush .extent {
+	stroke: #fff;
+	fill-opacity: .125;
+	shape-rendering: crispEdges;
+}
+
+.rinput{
+	float:right;
+	background-color:#e0e0e0;
+	border:none;
+
+	width:485px;
+	background-image:url(../img/gross.png);
+	background-repeat:no-repeat;
+	background-position-x: 465px;
+	background-position-y:-1px;
+	overflow:visible;
+}
+
+.triangle-topright {
+	float:right;
+    width: 0;
+    height: 0;
+    border-top: 19px solid grey;
+    border-left: 19px solid transparent; 
+	margin-right:0px;
+	margin-top:1px;
+}
+
+.svg{
+position:absolute;
+margin-top:450px;
+height:300px;
+}
+
+.readit{
+	float:right;
+	margin-top:-15px;
+	margin-right:40px;
+	
+}
+	.focus{
+	color:#44FFFF;
+	
+	}
+	button{
+		margin-left:20px;
+	}
+	.container{
+		word-wrap:break-word;
+		margin:30px;
+		color:#FFFFFF;
+	}
+	.chart-title{
+	border-bottom: 1px solid #d7d7d7;
+	color: #000;
+	font-size: 14px;
+	font-weight: 200;
+	padding: 7px 10px 4px;
+	
+	}
+	.wrapper1{
+		float:right;
+		background: #fff;
+		border: 1px solid #e2e2e2;
+		border-radius: 3px;
+		margin-bottom: 10px;
+		
+		padding-left:25px;
+		padding-right:25px;
+		
+	}
+	.wrapper2{
+	float:left;
+	background: #fff;
+/*	border: 1px solid #e2e2e2; */
+	border-radius: 3px;
+	margin-bottom: 10px;
+	padding-right:25px;
+	
+	}
+	.wrapper3{
+		float:left;
+		background: #fff;
+		/*border: 1px solid #e2e2e2;  */
+		border-radius: 3px;
+		margin-bottom: 10px;
+		padding-left:30px;
+		padding-right:30px;
+		
+	}
+	.row{
+		padding:8px;
+	}
+	#wordcloud{
+	
+	height:300px;
+	width:780px;
+	margin-left:20px;
+	margin-top:10px;
+	position:relative;
+	}
+	.rtitle{
+	padding-top:2px;
+	padding-bottom:2px;
+	background:#e0e0e0;
+	color:#333;
+	height:20px;
+	}
+	
+	.stars{
+		height:16px;
+		overflow:hidden;
+		width:82px;
+		background:url(../img/stars_map.png);
+		margin-left:120px;
+	}
+	
+	
+	
+	.star5{
+	background-position: -3px -163px;
+	}
+	
+	.star4{
+	background-position: -3px -127px;
+	}
+	
+	.star3{
+		background-position: -3px -91px;
+	}
+	
+	.star2{
+		background-position:-3px -55px;
+
+	}
+	
+	.star1{
+		background-position:-3px -19px;
+	}
+	
+	p{
+		position:relative;
+	}
+	
+	#display-none{
+		display:none;
+	}
+	
+	.tips{
+		position:absolute;
+		text-align:center;
+		border-radius:6px;
+		z-index:9999;
+		color:white;
+		background-color:grey;
+		width:80px;
+		height:30px;
+	}
+	
+	.classInteraction{
+		display:none;
+		position:absolute;
+		text-align:center;
+		z-index:9999;
+		background-color:ebedf3;
+		width:170;
+		height:130;
+		border-radius:6px;
+		
+	}
+	
+	.FoodRec{
+		width:30px;
+		height:30px;
+		background-color:#f3d0c3;
+		color:black;
+	}
+	
+	.ServiceRec{
+		width:30px;
+		height:30px;
+		background-color:#d6dfb9;
+		color:black;
+	}
+	
+	.DecorRec{
+		width:30px;
+		height:30px;
+		background-color:#82b2cb;
+		color:black;
+	}
+	
+	.OtherRec{
+		width:30px;
+		height:30px;
+		background-color:#e7e5d2;
+		color:black;
+	}
+	
+	.types{
+		height:20px;
+		width:100px;
+		border-radius:3px;
+	}
+	
+	li{
+		list-style-type:none;
+	}
+	
+	#grids{
+		border:1px solid #e2e2e2;
+		padding-right:30px;
+	}
+	
+	#judgeNegative{
+		width:800px;
+		height:600px;
+		background-color:white;
+		z-index:9999;
+		position:absolute;
+		text-align:center;
+		
+	}

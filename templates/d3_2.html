@@ -1,0 +1,240 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<title></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" rev="stylesheet" href="{{url_for('static',filename='css/jqcloud.css')}}" type="text/css" />
+	<link type="text/css" rel="stylesheet" href="{{url_for('static',filename='css/jquery.qtip.css')}}" type="text/css" />
+	<link rel="stylesheet" href="{{url_for('static',filename='css/tipso.css')}}">
+	<link rel="stylesheet" rev="stylesheet" href="{{url_for('static',filename='css/d3.css')}}" type="text/css" />
+	<link rel="stylesheet" href="{{url_for('static',filename='css/jquery-ui.css')}}"/>
+	
+	<meta http-equiv="Content-Language" content="zh-CN" />
+	<meta name="Keywords" content="" />
+	<meta name="Description" content="" />
+	<script type="text/javascript" >
+	var $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+	</script>
+	<script src="{{url_for('static',filename='script/d3.js')}}" charset="utf-8"></script>
+	<script type="text/javascript" src="{{url_for('static',filename='script/jquery-1.11.2.js')}}"></script>
+	<script type="text/javascript" src="{{url_for('static',filename='script/jquery.qtip.js')}}"></script>
+	<script type="text/javascript" src="{{url_for('static',filename='script/jquery-ui.js')}}"></script>
+	<script type="text/javascript" src="{{url_for('static',filename='script/grid.js')}}"></script>
+	<script type="text/javascript" src="{{url_for('static',filename='script/jqcloud-1.0.7.js')}}"></script>
+	<script type="text/javascript" src="{{url_for('static',filename='script/dd_4.js')}}"></script>
+	<script type="text/javascript" src="{{url_for('static',filename='script/cloud2.js')}}"></script>
+	<script type="text/javascript" src="{{url_for('static',filename='script/crossfilter.js')}}"></script>
+	<script type="text/javascript" src="{{url_for('static',filename='script/select.js')}}"></script>
+	
+	<script src={{url_for('static',filename='script/tipso.js')}}></script>
+	
+</head>
+<body>
+<div id="titles">
+
+<select id="cities" >
+<option value="Las Vegas">Las Vegas</option>
+<option value="Phoenix">Phoenix</option>
+<option value="Charlotte">Charlotte</option>
+<option value="Scottsdale">Scottsdale</option>
+<option value="Edinburgh">Edinburgh</option>
+<option value="Pittsburgh">Pittsburgh</option>
+<option value="Mesa">Mesa</option>
+<option value="Tempe">Tempe</option>
+<option value="Karlsruhe">Karlsruhe</option>
+<option value="Montreal">Montreal</option>
+<option value="Waterloo">Waterloo</option>
+<option value="Madison">Madison</option>
+<option value="Urbana-Champaign">Urbana-Champaign</option>
+</select>
+	
+Search Business Name: 
+	
+	<input id="autocomplete" title="type &quot;a&quot;">
+	
+<button onclick="javascript:getData('month');">按月曲线</button>
+<button id="originalData" onclick="javascript:getData('week');">按星期曲线</button>
+
+<button id="wordcloudType" onclick="javascript:changeWordcloud();">Sentiment Score</button> 
+
+<button id="classIt" onclick="javascript:catebackground();">类别</button>
+<b id="dateRange"> </b>
+<input type="checkbox" id="selectFood" checked="checked"></input>
+<b class="FoodRec">Food</b> 
+<input type="checkbox" id="selectService" checked="checked"></input>
+<b class="ServiceRec"> Service</b >
+<input type="checkbox" id="selectDecor" checked="checked"></input>
+<b class="DecorRec">Ambiance</b>
+<input type="checkbox" id="selectOther" checked="checked"></input>
+<b class="OtherRec"> Unlabeld</b>
+
+
+</div>
+
+<div class="row">
+
+
+<div class="wrapper2">  <div id="maincanvas" ></div>
+
+</div>
+
+<div class="wrapper1">
+
+<div class="chart-title" id="reviews"><div>Reviews  </div>
+
+</div>
+<div class="star-choice"></div>
+<div id="wordgrids"></div>
+<div class="reviewContext"></div>
+
+</div>
+
+</div>
+
+<div class="row">
+<div id="grids">  </div>
+<div class="wrapper3">
+<div class="chart-title">wordcloud</div> <div id="wordcloud" > </div>
+</div>
+<div id="display-none" ></div>
+
+
+<div class="classInteraction"><div> Select a type?   &nbsp;<span onclick="javascript:closeIt();"> X <span/></div> 
+<ul> <li class="types" style="background-color:#d6dfb9">Service </li><li class="types" style="background-color:#f3d0c3">Food </li> <li class="types" style="background-color:#82b2cb">Ambience</li><li class="types" style="background-color:#e7e5d2"> Other</li></ul> </div>
+
+
+</div>
+</p>
+
+
+
+<script type="text/javascript">
+
+	var globalYelp={};
+	globalYelp.dataset=[];
+	var oldData=[];
+	var xMarks=[];
+	var dataLength=0; 
+	var w=760;
+	globalYelp.city="Las Vegas";
+	globalYelp.wordfre={};
+	
+	globalYelp.threshold=1.2;
+	
+	globalYelp.overview={};
+	globalYelp.overview.marginRight=30;	//右边留出来用来放坐标轴
+	globalYelp.overview.tyscale;
+	globalYelp.overview.dateScaleType;	//记录用来表示
+	
+	globalYelp.wordcloud={};
+	globalYelp.wordcloud.clickedWords={};
+	globalYelp.wordcloud.cloudType=-1;
+	//切换词云的时候用 4代表全，0代表service 1代表Food 2代表装修,-1代表词云还没有生成
+	
+	globalYelp.wordcloud.wordseparate=[];
+	globalYelp.wordcloud.wordList={};
+	
+	globalYelp.wordcloud.groupedWords=[];
+	globalYelp.wordcloud.ungroupedWords=[];
+	globalYelp.wordcloud.groupNum=[];
+	
+	globalYelp.review={}
+	globalYelp.review.cateStatue=[1,1,1,1]; //控制评论的显示状态 第四个代表未分类的
+	globalYelp.review.falsePositiveReviews=[];
+	globalYelp.review.falseReviewMatrix=[];
+	
+	globalYelp.grid={};
+	globalYelp.grid.allWordSet=[];
+	globalYelp.grid.allType={};	//不同日期时间段的评分记录。
+	globalYelp.grid.allGridsNum=740;
+	globalYelp.grid.svg;
+	
+	globalYelp.grid={};
+	globalYelp.grid.allWordSet=[];
+	
+	globalYelp.tempType=[];
+	
+	var h=320;
+	var padding=40;
+	var aveNum=1;
+	var arrayYelpData=[];
+	var maxVariance;
+	var yelpdata ={ 
+    stars : [], 
+    date: [], 
+    text: [] 
+    } 
+	var ybottom=300;
+	var fullyelpdata;
+	var maxcount=0; //最大数
+	
+	var dataroot="y8VQQO_WkYNjSLcq6hyjPA"; 
+	
+	var xrange=[30,w];
+	var xscale;
+	var flow;
+	var area;
+	var brush;
+	var xflowAxis;
+	var strline;
+	var cpath;
+	var carea;
+	//用一个变量存储标题和副标题的高度，如果没有标题什么的，就为0
+	var head_height=padding;
+	var title="折线图";
+	var subTitle=aveNum;
+	
+	//用一个变量计算底部的高度，如果不是多系列，就为0
+	var path;
+	
+	//cross处理的数据
+	var crossdata;
+	var datedim;
+	//模拟数据
+	//定义画布
+	
+	var brushdata;
+	var denseXscale;
+	
+	var settime;
+	var dbrush;
+	var tempdbrush=[2];
+	
+	var sbrush;
+	 //drawChart();
+	 //wordcloud();
+	var tagtime=0;
+	
+	var wordsSentimentArray=[];
+	var wordcloudType="score";	
+	var foot_height=padding;
+	
+	var svg;
+	
+	var electedArray;
+	 
+	globalYelp.reviewEdit;
+	//the array record the users interactions
+	 
+	var hideSentence;
+
+	$("#autocomplete").autocomplete({
+		source:$SCRIPT_ROOT+'/searchname',
+		select:function(event,ui){
+			dataroot=ui.item.id;
+			arrayYelpData.length=0;
+			globalYelp.wordcloud.clickedWords=new Object();
+			globalYelp.wordcloud.clickedWords.LL=0;
+		},
+		city:globalYelp
+	});
+	
+	$("#cities").change(function(){
+		globalYelp.city=$(this).children('option:selected').val();
+	})
+	
+	
+</script>
+
+</body>
+</html>
