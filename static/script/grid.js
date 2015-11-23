@@ -121,7 +121,7 @@ var drawCateGrids=function(tempvalue){
 				
 				if(typeof(sentiment)!="undefined"){
 					var numOfsen=parseFloat(sentiment.slice(1,sentiment.indexOf(',')));
-					if(Math.abs(numOfsen-0.0)>0.0001){
+					if((numOfsen-0.0)<-0.05){
 						if(typeof(allType[ele][dateStr])=="undefined"){
 							allType[ele][dateStr]=new Array();
 						}
@@ -172,13 +172,13 @@ var drawCateGrids=function(tempvalue){
 	
 	var FoodIA=svg.append("text").text("Food").attr("x",50).attr("y",fontBaseHeight).style("fill","#b03a23").style('text-anchor',"end").style("font-size",15);
 	FoodIA.on("click",function(){
-		cateWordcloud(1);
-		filterReveiw(1);
+		cateWordcloud(0);
+		filterReveiw(0);
 	})
 	var ServiceIA=svg.append("text").text("Service").attr("x",50).attr("y",fontBaseHeight+gridHeight*2).style("fill","#83ba39").style("text-anchor","end").style("font-size",15);
 	ServiceIA.on("click",function(){
-		cateWordcloud(0);
-		filterReveiw(0);
+		cateWordcloud(1);
+		filterReveiw(1);
 	})
 
 	var DecorIA=svg.append("text").text("Ambiance").attr("x",50).attr("y",fontBaseHeight+gridHeight*4).style("fill","#3090bc").style("text-anchor","end").style("font-size",15);
@@ -201,14 +201,10 @@ var DrawBar=function(svg){
 	var allGridsNum=globalYelp.grid.allGridsNum;
 	
 	//高度有所修改，所以显示也有一点不一样
-	var hs=new Array(3);
-	hs[1]=30;
-	hs[0]=gridHeight*2+30;
-	hs[2]=gridHeight*4+30;
 	
 	for(var i=0;i<typenum;i++){
 		for(var j=0;j<allGridsNum;j++){
-			svg.append("rect").attr("x",gwidth*j+60).attr("width",gwidth).attr("height",gridHeight).attr("y",hs[i]).attr("fill",continueColor(allGrids[i][j]));
+			svg.append("rect").attr("x",gwidth*j+60).attr("width",gwidth).attr("height",gridHeight).attr("y",30+gridHeight*i*2).attr("fill",continueColor(allGrids[i][j]));
 		}
 	}
 }

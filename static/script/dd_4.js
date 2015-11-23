@@ -50,49 +50,49 @@ function drawChart()
 	.attr("fill","#6c854b")
 	.on("mousemove",function(d,i){
 			
-	var year=xMarks[i].substr(0,4);
-	var month=xMarks[i].substr(5,2);
-		
-	for(var i=0;i<arrayYelpData.length;i++){
-		var ss=arrayYelpData[i].date;
-		var vyear=ss.substr(0,4);
-		var vmonth=parseInt(ss.substr(5,2));	
-			//console.log(typeof(vmonth)+typeof(month));
-		if(year==vyear&&parseInt(month)==vmonth){
-				//右边显示评论
-			var reviewtext=d3.select(".container").text(this.text+arrayYelpData[i].text);
+		var year=xMarks[i].substr(0,4);
+		var month=xMarks[i].substr(5,2);
+			
+		for(var i=0;i<arrayYelpData.length;i++){
+			var ss=arrayYelpData[i].date;
+			var vyear=ss.substr(0,4);
+			var vmonth=parseInt(ss.substr(5,2));	
+				//console.log(typeof(vmonth)+typeof(month));
+			if(year==vyear&&parseInt(month)==vmonth){
+					//右边显示评论
+				var reviewtext=d3.select(".container").text(this.text+arrayYelpData[i].text);
+			}
 		}
-	}
-})
+	})
 				
-		//横轴数据动画
-		xScale.domain([0,newLength-1]);		
-		xAxis.scale(xScale).ticks(newLength);
-		xBar.transition().duration(_duration).call(xAxis);
-		xBar.selectAll("text").text(function(d){return xMarks[d];});
-		xInner.scale(xScale).ticks(newLength);
-		xInnerBar.transition().duration(_duration).call(xInner);				
+	//横轴数据动画
+	xScale.domain([0,newLength-1]);		
+	xAxis.scale(xScale).ticks(newLength);
+	xBar.transition().duration(_duration).call(xAxis);
+	xBar.selectAll("text").text(function(d){return xMarks[d];});
+	xInner.scale(xScale).ticks(newLength);
+	xInnerBar.transition().duration(_duration).call(xInner);				
+	
+	//纵轴数据动画
+	yScale.domain([0,d3.max(globalYelp.dataset)]);				
+	yBar.transition().duration(_duration).call(yAxis);
+	yInnerBar.transition().duration(_duration).call(yInner);		
+	
+	//路径动画
+	path.transition().duration(_duration).attr("d",line(globalYelp.dataset));
+			
+	//圆点动画
+	svg.selectAll("circle")		
+	.transition()
+	.duration(_duration)
+	.attr("cx", function(d,i) {				
+			return xScale(i);
+	})  
+	.attr("cy", function(d) {
+			return yScale(d);  
+	})								
 		
-		//纵轴数据动画
-		yScale.domain([0,d3.max(globalYelp.dataset)]);				
-		yBar.transition().duration(_duration).call(yAxis);
-		yInnerBar.transition().duration(_duration).call(yInner);		
-		
-		//路径动画
-		path.transition().duration(_duration).attr("d",line(globalYelp.dataset));
-				
-		//圆点动画
-		svg.selectAll("circle")		
-		.transition()
-        .duration(_duration)
-		.attr("cx", function(d,i) {				
-				return xScale(i);
-		})  
-		.attr("cy", function(d) {
-				return yScale(d);  
-		})								
-		
-	}
+}
 	
 function print_filter(filter){
 	var f=eval(filter);
@@ -116,6 +116,7 @@ function getData(type)
 			var jsons=alljsons.data;
 			var cate=alljsons.classify;
 			
+			console.log(cate);
 			globalYelp.classData=cate;
 			var slength=cate.length;
 			if(typeof(globalYelp.classtype)!="undefined"){

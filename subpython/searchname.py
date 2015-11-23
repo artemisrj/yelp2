@@ -8,7 +8,6 @@ def searchnames(term,city):
 
     cur.execute("select bname,bcount,bid from business where bname like '%"+term+"%' and bcity ='"+city+"' order by bcount desc limit 10")
 
-
     #print "Content-type: text/html\n"
     aa=json.dumps(cur.fetchall())
     cur.close()

@@ -6,12 +6,13 @@ def getVertifyData():
     cur=cx.cursor()
     a=[]
     cur.execute("select id,data from SavedData")
-    CC=11626
+    dd=cur.fetchall()
+    CC=len(dd)
 
     for i in range(CC):
         a.append("")
 
-    for eachline in cur.fetchall():
+    for eachline in dd:
         a[int(eachline[0])]=eachline[1]
        
     cur.close()
